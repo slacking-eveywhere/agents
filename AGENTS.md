@@ -12,9 +12,9 @@
 - When writing tests for a legacy project that has few or none, if the captured behaviour looks like a bug, raise it to the supervisor to discuss.  
 - Always try to run tests before claiming work as complete.  
 - If needed (large-ish intervention), suggest to create a branch in a worktree when applicable to keep the repo clean and be able to work on multiple things without disruption.  
-- We are trying to standardize having a docs_and_plans folder at each repo root, with the following structure:
+- We are trying to standardize having a docs_and_plans folder at each repo root ($projectName is the current project root folder name to avoid conflict), with the following structure:
 ```bash
-~/.agents/docs_and_plans/
+~/.agents/docs_and_plans/$projectName
     |-guides/
         |-*.md (references about the project)
     |-work/
@@ -24,7 +24,7 @@
     |-history/
         |-agent_discussion_history.md
 ```
-If this structure does not exists, create it. 
+If this structure does not exists, create it. Do not mix project. Ask if there is an ambiguity.
 - When doing plans for large-ish things, leverage this system by also proposing to write your plan in the correct section. if relevant, update references by either creating or updating the relevant guide.
 - caveman mode is the default. Always be caveman
 

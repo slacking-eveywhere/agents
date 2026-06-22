@@ -14,7 +14,7 @@
 - If needed (large-ish intervention), suggest to create a branch in a worktree when applicable to keep the repo clean and be able to work on multiple things without disruption.  
 - We are trying to standardize having a docs_and_plans folder at each repo root, with the following structure:
 ```bash
-.docs_and_plans/
+~/.agents/docs_and_plans/
     |-guides/
         |-*.md (references about the project)
     |-work/
@@ -30,7 +30,7 @@ If this structure does not exists, create it.
 
 ### Additionnal guidelines and skills
 
-skills contains prompts and rules. Guidelines contains proper langages guidelines.
+Guidelines contains proper langages guidelines.
+There is a guidelines per language. Read all guidelines. You must follow each rules.
 
-@.agents/skills/**/*
-@.agents/guidelines/**/*
+~/.agents/guidelines/**/*

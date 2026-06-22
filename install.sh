@@ -1,15 +1,19 @@
 #!/usr/bin/env sh
 
-AGENTS_DIRNAME=~/.config/zed
+ZED_AGENTS_DIRNAME=~/.config/zed
+HOME_AGENTS_DIRNAME=~/.agents
+SKILL_FOLDER="$HOME_AGENTS_DIRNAME"/skills
 
-mkdir -p "$AGENTS_DIRNAME"
-mkdir -p "$AGENTS_DIRNAME"/guidelines
-mkdir -p .agents/skills
+REFS="refs/heads/main"
 
-if [ -d .agents/skills ]; then
-    rm -rf .agents/skills
+mkdir -p "$ZED_AGENTS_DIRNAME"
+mkdir -p "$ZED_AGENTS_DIRNAME"/guidelines
+mkdir -p "$HOME_AGENTS_DIRNAME"
+
+if [ -d "$SKILL_FOLDER" ]; then
+    rm -rf "$SKILL_FOLDER"
 fi
 
-curl -L https://raw.githubusercontent.com/slacking-eveywhere/agents/AGENTS.md -o "$AGENTS_DIRNAME"/AGENTS.md
-curl -L https://raw.githubusercontent.com/slacking-eveywhere/agents/bin/skills.tar.gz | tar -xz -C .agents
-curl -L https://raw.githubusercontent.com/slacking-eveywhere/agents/bin/guidelines.tar.gz | tar -xz -C "$AGENTS_DIRNAME"
+curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/AGENTS.md -o "$ZED_AGENTS_DIRNAME"/AGENTS.md
+curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/bin/skills.tar.gz | tar -xz -C "$HOME_AGENTS_DIRNAME"
+curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/bin/guidelines.tar.gz | tar -xz -C "$ZED_AGENTS_DIRNAME"

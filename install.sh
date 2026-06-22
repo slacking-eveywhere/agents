@@ -21,3 +21,5 @@ fi
 curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/AGENTS.md -o "$ZED_AGENTS_DIRNAME"/AGENTS.md
 curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/bin/skills.tar.gz | tar -xz -C "$HOME_AGENTS_DIRNAME"
 curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/bin/guidelines.tar.gz | tar -xz -C "$ZED_AGENTS_DIRNAME"
+
+printf "Installed AGENTS.md in %s\nguidelines in %s\nskills in %s\n" $ZED_AGENTS_DIRNAME $ZED_AGENTS_DIRNAME $SKILL_FOLDER

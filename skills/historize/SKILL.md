@@ -1,5 +1,5 @@
 ---
-name: Historize
+name: historize
 description: >
   Guidelines for writting a agent discussion and action summaries.
   Each call to this skill should produce a concise summary of the agent's discussion and actions taken, suitable for logging or user feedback. Focus on clarity, brevity, and relevance to the user's query or task.

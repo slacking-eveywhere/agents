@@ -28,6 +28,7 @@ curl -L -sSf "$BASE_URL/bin/checksums.sha256" -o "$TMPDIR/checksums.sha256" || d
 printf "Downloading artifacts...\n"
 curl -L -sSf "$BASE_URL/bin/skills.tar.gz" -o "$TMPDIR/skills.tar.gz" || die "failed to download skills.tar.gz"
 curl -L -sSf "$BASE_URL/bin/guidelines.tar.gz" -o "$TMPDIR/guidelines.tar.gz" || die "failed to download guidelines.tar.gz"
+curl -L -sSf "$BASE_URL/AGENTS.md" -o "$TMPDIR/AGENTS.md" || die "failed to download AGENTS.md"
 
 printf "Verifying checksums...\n"
 cd "$TMPDIR"
@@ -45,4 +46,7 @@ mv "$TMPDIR/skills" "$SKILL_FOLDER"
 rm -rf "$ZED_AGENTS_DIRNAME/guidelines"
 mv "$TMPDIR/guidelines" "$ZED_AGENTS_DIRNAME/guidelines"
 
-printf "Installed"
+cp "$TMPDIR/AGENTS.md" "$ZED_AGENTS_DIRNAME/AGENTS.md"
+
+printf "Installed:\n  AGENTS.md  -> %s\n  guidelines -> %s\n  skills     -> %s\n" \
+    "$ZED_AGENTS_DIRNAME/AGENTS.md" "$ZED_AGENTS_DIRNAME/guidelines" "$SKILL_FOLDER"

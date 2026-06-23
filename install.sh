@@ -1,25 +1,53 @@
 #!/usr/bin/env sh
+set -e
 
 ZED_AGENTS_DIRNAME=~/.config/zed
 HOME_AGENTS_DIRNAME=~/.agents
-SKILL_FOLDER="$HOME_AGENTS_DIRNAME"/skills
+SKILL_FOLDER="$HOME_AGENTS_DIRNAME/skills"
 
-REFS="refs/heads/main"
+BASE_URL="https://raw.githubusercontent.com/slacking-eveywhere/agents/refs/heads/main"
+
+TMPDIR=$(mktemp -d)
+trap 'rm -rf "$TMPDIR"' EXIT
+
+die() {
+    printf "error: %s\n" "$1" >&2
+    exit 1
+}
+
+if [ "$(uname -s)" != "Linux" ]; then
+    die "unsupported OS: $(uname -s). Only Linux supported."
+fi
 
 mkdir -p "$ZED_AGENTS_DIRNAME"
-mkdir -p "$ZED_AGENTS_DIRNAME"/guidelines
 mkdir -p "$HOME_AGENTS_DIRNAME"
 
-if [ -d "$SKILL_FOLDER" ]; then
-    rm -rf "$SKILL_FOLDER"
-fi
+printf "Downloading checksums manifest...\n"
+curl -L -sSf "$BASE_URL/bin/checksums.sha256" -o "$TMPDIR/checksums.sha256" || die "failed to download checksums.sha256"
 
-if [ -d "$ZED_AGENTS_DIRNAME"/guidelines ]; then
-    rm -rf "$ZED_AGENTS_DIRNAME"/guidelines
-fi
+printf "Downloading artifacts...\n"
+curl -L -sSf "$BASE_URL/bin/skills.tar.gz" -o "$TMPDIR/skills.tar.gz" || die "failed to download skills.tar.gz"
+curl -L -sSf "$BASE_URL/bin/guidelines.tar.gz" -o "$TMPDIR/guidelines.tar.gz" || die "failed to download guidelines.tar.gz"
 
-curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/AGENTS.md -o "$ZED_AGENTS_DIRNAME"/AGENTS.md
-curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/bin/skills.tar.gz | tar -xz -C "$HOME_AGENTS_DIRNAME"
-curl -L -sS https://raw.githubusercontent.com/slacking-eveywhere/agents/"$REFS"/bin/guidelines.tar.gz | tar -xz -C "$ZED_AGENTS_DIRNAME"
+printf "Verifying checksums...\n"
+cd "$TMPDIR"
+sha256sum -c checksums.sha256 || die "checksum verification failed"
+cd - >/dev/null
 
-printf "Installed AGENTS.md in %s\nguidelines in %s\nskills in %s\n" $ZED_AGENTS_DIRNAME $ZED_AGENTS_DIRNAME $SKILL_FOLDER
+printf "Extracting...\n"
+SKILLS_TMP="$TMPDIR/skills"
+GUIDELINES_TMP="$TMPDIR/guidelines"
+mkdir -p "$SKILLS_TMP" "$GUIDELINES_TMP"
+
+tar -xz -C "$SKILLS_TMP" -f "$TMPDIR/skills.tar.gz"
+tar -xz -C "$GUIDELINES_TMP" -f "$TMPDIR/guidelines.tar.gz"
+
+printf "Installing...\n"
+rm -rf "$SKILL_FOLDER"
+mv "$SKILLS_TMP" "$SKILL_FOLDER"
+
+rm -rf "$ZED_AGENTS_DIRNAME/guidelines"
+mv "$GUIDELINES_TMP" "$ZED_AGENTS_DIRNAME/guidelines"
+
+printf "Installed:\n  guidelines -> %s\n  skills     -> %s\n" \
+    "$ZED_AGENTS_DIRNAME/guidelines" "$SKILL_FOLDER"

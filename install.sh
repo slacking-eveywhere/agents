@@ -35,19 +35,14 @@ sha256sum -c checksums.sha256 || die "checksum verification failed"
 cd - >/dev/null
 
 printf "Extracting...\n"
-SKILLS_TMP="$TMPDIR/skills"
-GUIDELINES_TMP="$TMPDIR/guidelines"
-mkdir -p "$SKILLS_TMP" "$GUIDELINES_TMP"
-
-tar -xz -C "$SKILLS_TMP" -f "$TMPDIR/skills.tar.gz"
-tar -xz -C "$GUIDELINES_TMP" -f "$TMPDIR/guidelines.tar.gz"
+tar -xz -C "$TMPDIR" -f "$TMPDIR/skills.tar.gz"
+tar -xz -C "$TMPDIR" -f "$TMPDIR/guidelines.tar.gz"
 
 printf "Installing...\n"
 rm -rf "$SKILL_FOLDER"
-mv "$SKILLS_TMP" "$SKILL_FOLDER"
+mv "$TMPDIR/skills" "$SKILL_FOLDER"
 
 rm -rf "$ZED_AGENTS_DIRNAME/guidelines"
-mv "$GUIDELINES_TMP" "$ZED_AGENTS_DIRNAME/guidelines"
+mv "$TMPDIR/guidelines" "$ZED_AGENTS_DIRNAME/guidelines"
 
-printf "Installed:\n  guidelines -> %s\n  skills     -> %s\n" \
-    "$ZED_AGENTS_DIRNAME/guidelines" "$SKILL_FOLDER"
+printf "Installed"

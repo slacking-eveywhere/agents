@@ -61,6 +61,11 @@ That's it. No ticket numbers, no tags, no formal structure.
 - Before switching tasks or taking a break.
 - Before trying something risky (so you can revert easily).
 
+## What to ignore
+- If a file contains credentials, ensure it is in .gitignore file.
+- Do not commit `.env`, `node_modules`, `.next`, `.DS_Store`, ...
+- Do not commit `CONTEXT.md` file and `.docs`.
+
 ## Checklist
 
 - [ ] Summary is 50 characters or less

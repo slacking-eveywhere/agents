@@ -22,10 +22,8 @@ fi
 mkdir -p "$ZED_AGENTS_DIRNAME"
 mkdir -p "$HOME_AGENTS_DIRNAME"
 
-printf "Downloading checksums manifest...\n"
+printf "Downloading...\n"
 curl -L -sSf "$BASE_URL/bin/checksums.sha256" -o "$TMPDIR/checksums.sha256" || die "failed to download checksums.sha256"
-
-printf "Downloading artifacts...\n"
 curl -L -sSf "$BASE_URL/bin/skills.tar.gz" -o "$TMPDIR/skills.tar.gz" || die "failed to download skills.tar.gz"
 curl -L -sSf "$BASE_URL/bin/guidelines.tar.gz" -o "$TMPDIR/guidelines.tar.gz" || die "failed to download guidelines.tar.gz"
 curl -L -sSf "$BASE_URL/AGENTS.md" -o "$TMPDIR/AGENTS.md" || die "failed to download AGENTS.md"
@@ -35,11 +33,9 @@ cd "$TMPDIR"
 sha256sum -c checksums.sha256 || die "checksum verification failed"
 cd - >/dev/null
 
-printf "Extracting...\n"
 tar -xz -C "$TMPDIR" -f "$TMPDIR/skills.tar.gz"
 tar -xz -C "$TMPDIR" -f "$TMPDIR/guidelines.tar.gz"
 
-printf "Installing...\n"
 rm -rf "$SKILL_FOLDER"
 mv "$TMPDIR/skills" "$SKILL_FOLDER"
 
@@ -48,5 +44,4 @@ mv "$TMPDIR/guidelines" "$ZED_AGENTS_DIRNAME/guidelines"
 
 cp "$TMPDIR/AGENTS.md" "$ZED_AGENTS_DIRNAME/AGENTS.md"
 
-printf "Installed:\n  AGENTS.md  -> %s\n  guidelines -> %s\n  skills     -> %s\n" \
-    "$ZED_AGENTS_DIRNAME/AGENTS.md" "$ZED_AGENTS_DIRNAME/guidelines" "$SKILL_FOLDER"
+printf "Installed.\n"

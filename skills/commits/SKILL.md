@@ -13,7 +13,7 @@ Write commit messages terse and exact. Conventional Commits format. No fluff. Wh
 
 Commits are for you, not a team. Write them so that future-you can understand what happened and why. Keep it simple.  
 If you can't explain it in a few words, you probably need to break the change into smaller commits.  
-Use git command to git diff, understand the chance, git commit and git push.
+Use git command to git diff, understand the chance, git commit but never push.
 
 ## Format
 

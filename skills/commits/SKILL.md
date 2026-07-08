@@ -24,7 +24,7 @@ Use `git commit -m` command to create the commit. Do not ask for permission to c
 
 ## How to track changes
 
-Always use git status to check what has changed in the working directory.
+Always use `git status` command to check what has changed in the working directory.
 
 Use `git log` to see the history of commits.
 Use `git diff` to see changes between commits.

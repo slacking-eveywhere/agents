@@ -23,6 +23,8 @@ Use `git` commands like `git diff`, understand the change, `git commit` but neve
 
 ## How to track changes
 
+Always use git status to check what has changed in the working directory.
+
 Use `git log` to see the history of commits.
 Use `git diff` to see changes between commits.
 Use `git blame` to see who last modified a line.

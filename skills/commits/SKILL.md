@@ -9,6 +9,8 @@ description: >
 
 Write commit messages terse and exact. Conventional Commits format. No fluff. Why over what.
 
+**When this skill is invoked: immediately run the git commands below. Do not ask the user for context. Do not wait. Act.**
+
 ## Philosophy
 
 Commits are for you, not a team. Write them so that future-you can understand what happened and why. Keep it simple.  
@@ -24,7 +26,7 @@ Use `git commit -m` command to create the commit. Do not ask for permission to c
 
 ## How to track changes
 
-Run these commands in order before writing any commit message:
+**Run immediately upon invocation — no user input needed:**
 
 ```sh
 git status                  # list modified, staged, untracked files

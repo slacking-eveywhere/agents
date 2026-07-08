@@ -13,7 +13,16 @@ Write commit messages terse and exact. Conventional Commits format. No fluff. Wh
 
 Commits are for you, not a team. Write them so that future-you can understand what happened and why. Keep it simple.  
 If you can't explain it in a few words, you probably need to break the change into smaller commits.  
-Use git command to git diff, understand the chance, git commit but never push.
+Use `git` commands like `git diff`, understand the change, `git commit` but never push.
+
+## How to track changes
+
+Use `git log` to see the history of commits.
+Use `git diff` to see changes between commits.
+Use `git blame` to see who last modified a line.
+
+Then create a synthetic summary of the change in a commit message. Focus on the "why" behind the change, not just what changed.
+It is your commit message base. Then follow the syntaxic rules below to write a good commit message.
 
 ## Format
 

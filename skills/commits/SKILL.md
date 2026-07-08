@@ -24,14 +24,20 @@ Use `git commit -m` command to create the commit. Do not ask for permission to c
 
 ## How to track changes
 
-Always use `git status` command to check what has changed in the working directory.
+Run these commands in order before writing any commit message:
 
-Use `git log` to see the history of commits.
-Use `git diff` to see changes between commits.
-Use `git blame` to see who last modified a line.
+```sh
+git status                  # list modified, staged, untracked files
+git diff                    # unstaged changes (full patch)
+git diff --staged           # staged changes (full patch)
+git log --oneline -10       # recent history for context
+```
 
-Then create a synthetic summary of the change in a commit message. Focus on the "why" behind the change, not just what changed.
-It is your commit message base. Then follow the syntaxic rules below to write a good commit message.
+Read every hunk. Understand *what* changed and *why* it was needed.
+Group related hunks mentally. If hunks are unrelated, split into multiple commits.
+
+Then synthesise a one-line answer to: "Why does this change exist?"
+That answer becomes the commit message subject. Apply the Rules below to shape it.
 
 ## Format
 
@@ -75,9 +81,21 @@ That's it. No ticket numbers, no tags, no formal structure.
 - **No period**: Do not end with a period.
 - **Be specific**: "Fix login bug" is better than "Fix bug".
 
+## Workflow — How to Commit
+
+1. Run `git status` + `git diff` + `git diff --staged` — read all hunks.
+2. Identify logical groups. If multiple unrelated changes exist, stage and commit each group separately.
+3. Stage the right files:
+   - All: `git add -A`
+   - Specific file: `git add <file>`
+   - Exclude a file: `git add -A && git restore --staged <file>`
+4. Write subject line: answer "why does this exist?" in ≤50 chars imperative mood.
+5. Commit: `git commit -m "<subject>"` — add `-m "<body>"` only if subject is insufficient.
+6. Never push. Stop after commit.
+
 ## When to Commit
 
-- When calling this skill, the agent will commit all changes in the working directory.
+- When calling this skill, commit all changes unless a file is excluded via `but <file>` parameter.
 - After completing a logical change (a function, a fix, a refactor).
 - Before switching tasks or taking a break.
 - Before trying something risky (so you can revert easily).

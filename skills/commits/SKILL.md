@@ -13,7 +13,8 @@ Write commit messages terse and exact. Conventional Commits format. No fluff. Wh
 
 Commits are for you, not a team. Write them so that future-you can understand what happened and why. Keep it simple.  
 If you can't explain it in a few words, you probably need to break the change into smaller commits.  
-Use `git` commands like `git diff`, understand the change, `git commit` but never push.
+Use `git` commands, understand the change, `git commit` but never push.  
+Use `git commit -m` command to create the commit. Do not ask for permission to commit. 
 
 ## Parameters
 
@@ -76,6 +77,7 @@ That's it. No ticket numbers, no tags, no formal structure.
 
 ## When to Commit
 
+- When calling this skill, the agent will commit all changes in the working directory.
 - After completing a logical change (a function, a fix, a refactor).
 - Before switching tasks or taking a break.
 - Before trying something risky (so you can revert easily).

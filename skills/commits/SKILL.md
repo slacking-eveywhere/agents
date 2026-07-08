@@ -15,6 +15,12 @@ Commits are for you, not a team. Write them so that future-you can understand wh
 If you can't explain it in a few words, you probably need to break the change into smaller commits.  
 Use `git` commands like `git diff`, understand the change, `git commit` but never push.
 
+## Parameters
+
+- No parameters, or explicit `all changes` parameter. Commit all changes in the working directory.
+- `all changes` parameter may be followed by a `but ...` with a filename as `...` to commit all changes except that file.
+- A file name parameter can be optional. Commit only changes to that file. 
+
 ## How to track changes
 
 Use `git log` to see the history of commits.

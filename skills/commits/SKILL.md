@@ -1,142 +1,160 @@
+````yaml
 ---
 name: commits
-description: >
-  Guidelines for writing good commit messages.
-  Focus on clarity, brevity, and explaining the "why" behind changes.
-  Use present tense and keep the summary line concise.
-  Optional body for additional context.  
+description: Inspect git changes, create focused commits and write concise Conventional Commit messages.
 ---
 
-Write commit messages terse and exact. Conventional Commits format. No fluff. Why over what.
+# Purpose
 
-**When this skill is invoked: execute commit workflow immediately. Do not ask user for context. Do not wait. Act.**
+Create one logical git commit from the current repository state.
 
-## Execution Contract (highest priority)
+When this skill is invoked, execute the workflow immediately.
+Do not ask the user for git status, git diff or file contents.
+Never push.
 
-Treat this skill as an **action skill**, not advisory text.
+## Workflow
 
-- MUST run git inspection commands yourself.
-- MUST derive commit message from actual diff.
-- MUST stage + commit according to parameters.
-- MUST NOT ask user to provide `git diff`, file contents, or "context".
-- MUST NOT wait for next instruction after invocation.
-- MUST stop after commit (never push).
-
-If no changes exist, reply exactly: `No changes to commit.` and stop.
-
-## Philosophy
-
-Commits are for you, not a team. Write them so that future-you can understand what happened and why. Keep it simple.  
-If you can't explain it in a few words, you probably need to break the change into smaller commits.  
-Use `git` commands, understand the change, `git commit` but never push.  
-Use `git commit -m` command to create the commit. Do not ask for permission to commit. 
-
-## Parameters
-
-- No parameters, or explicit `all changes` parameter. Commit all changes in the working directory.
-- `all changes` parameter may be followed by a `but ...` with a filename as `...` to commit all changes except that file.
-- A file name parameter can be optional. Commit only changes to that file. 
-
-## How to track changes
-
-**Run immediately upon invocation — no user input needed:**
+1. Inspect the repository:
 
 ```sh
 git --no-pager status
 git --no-pager diff
 git --no-pager diff --staged
 git --no-pager log --oneline -10
+````
+
+2. Determine the requested scope.
+
+Supported forms:
+
+* commit
+* commit all changes
+* commit <file>
+* commit all changes but <file>
+
+Default behavior: commit all tracked changes.
+
+3. Stage files.
+
+Examples:
+
+```sh
+git add -A
+git add <file>
+git restore --staged <file>
 ```
 
-Never ask user to run these commands. Agent runs them.
+Never stage:
 
-Read every hunk. Understand *what* changed and *why* it was needed.
-Group related hunks mentally. If hunks are unrelated, split into multiple commits.
+* .env
+* node_modules/
+* .next/
+* .DS_Store
+* CONTEXT.md
+* .docs/
 
-Then synthesise a one-line answer to: "Why does this change exist?"
-That answer becomes the commit message subject. Apply the Rules below to shape it.
+If credentials are found in tracked files, do not commit them and ensure they are ignored.
 
-## Format
+4. Review the staged diff:
+
+```sh
+git --no-pager diff --staged
+```
+
+5. Group changes into logical commits.
+
+If unrelated changes exist, create multiple commits rather than one large commit.
+
+If there are no staged or unstaged changes, reply exactly:
 
 ```
-Short summary in present tense
-
-Optional longer explanation if needed.
+No changes to commit.
 ```
 
-That's it. No ticket numbers, no tags, no formal structure.
+6. Write the commit message.
 
-## Rules
+Subject format:
 
-**Subject line:**
-- `<type>(<scope>): <imperative summary>` — `<scope>` optional
-- Types: `feat`, `fix`, `refactor`, `perf`, `docs`, `test`, `chore`, `build`, `ci`, `style`, `revert`
-- Imperative mood: "add", "fix", "remove" — not "added", "adds", "adding"
-- ≤50 chars when possible, hard cap 72
-- No trailing period
-- Match project convention for capitalization after the colon
+```
+<type>(<scope>): <summary>
+```
 
-**Body (only if needed):**
-- Skip entirely when subject is self-explanatory
-- Add body only for: non-obvious *why*, breaking changes, migration notes, linked issues
-- Wrap at 72 chars
-- Bullets `-` not `*`
-- Reference issues/PRs at end: `Closes #42`, `Refs #17`
+Scope is optional.
 
-**What NEVER goes in:**
-- "This commit does X", "I", "we", "now", "currently" — the diff says what
-- "As requested by..." — use Co-authored-by trailer
-- "Generated with Claude Code" or any AI attribution
-- Emoji (unless project convention requires)
-- Restating the file name when scope already says it
+Allowed types:
 
-## The Summary Line
+* feat
+* fix
+* refactor
+* perf
+* docs
+* test
+* build
+* ci
+* chore
+* style
+* revert
 
-- **Length**: 50 characters or less.
-- **Tense**: Present tense, imperative mood ("Add feature", not "Added feature" or "Adds feature").
-- **Capitalize**: Start with a capital letter.
-- **No period**: Do not end with a period.
-- **Be specific**: "Fix login bug" is better than "Fix bug".
+Rules:
 
-## Workflow — How to Commit
+* imperative mood
+* present tense
+* explain why rather than what
+* concise
+* no trailing period
+* target 50 characters, maximum 72
 
-1. Run inspection commands from **How to track changes**.
-2. Determine scope from parameters (`all changes`, optional `but <file>`, or explicit file).
-3. Stage files:
-   - All: `git add -A`
-   - Specific file: `git add <file>`
-   - Exclude one file: `git add -A && git restore --staged <file>`
-4. Re-check staged patch: `git --no-pager diff --staged`.
-5. Write subject from **why** (not just what), following Rules.
-6. Commit with non-interactive command:
-   - `GIT_EDITOR=true git commit -m "<subject>"`
-   - Optional body: `GIT_EDITOR=true git commit -m "<subject>" -m "<body>"`
-7. Report resulting commit hash and subject.
-8. Never push. Stop after commit.
+Examples:
 
-## Forbidden Behavior
+```
+fix(auth): prevent token reuse
+```
 
-- Asking user for `git diff` output.
-- Asking user which files changed when git can answer.
-- Saying "provide context" before running git commands.
-- Returning only advice when invocation requested action.
+```
+refactor(cache): simplify eviction logic
+```
 
-## When to Commit
+Body:
 
-- When calling this skill, commit all changes unless a file is excluded via `but <file>` parameter.
-- After completing a logical change (a function, a fix, a refactor).
-- Before switching tasks or taking a break.
-- Before trying something risky (so you can revert easily).
+Omit unless it adds useful context.
 
-## What to ignore
-- If a file contains credentials, ensure it is in .gitignore file.
-- Do not commit `.env`, `node_modules`, `.next`, `.DS_Store`, ...
-- Do not commit `CONTEXT.md` file and `.docs`.
+Include only:
 
-## Checklist
+* non-obvious motivation
+* migration notes
+* breaking changes
+* issue references
 
-- [ ] Summary is 50 characters or less
-- [ ] Summary uses present tense imperative mood
-- [ ] Commit contains only one logical change
-- [ ] Code compiles and runs without errors
-- [ ] Commit message explains why, not just what
+Wrap body at 72 characters.
+
+7. Commit.
+
+Use:
+
+```sh
+GIT_EDITOR=true git commit -m "<subject>"
+```
+
+or
+
+```sh
+GIT_EDITOR=true git commit \
+  -m "<subject>" \
+  -m "<body>"
+```
+
+8. Report only:
+
+* commit hash
+* commit subject
+
+Stop after the commit.
+Never push.
+
+## Principles
+
+* Prefer several small commits over one large commit.
+* One commit should represent one logical change.
+* Read the diff before writing the message.
+* The message explains intent, not implementation.
+* Never mention AI or code generation.
